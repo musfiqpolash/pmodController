@@ -2,7 +2,7 @@
 StaticJsonDocument<128> doc;
 JsonObject pmod_data = doc.createNestedObject("pmod_data");
 String input;
-int zybo_power = 13;
+int zybo_power = 10;
 int pmod_pin1 = 2;
 int pmod_pin2 = 3;
 int pmod_pin3 = 4;
@@ -126,7 +126,7 @@ void jsonData() {
   pmod_data["pmod_pin8"] = digitalRead(pmod_pin8);
   pmod_data["pmod_pin9"] = digitalRead(pmod_pin9);
   pmod_data["pmod_pin10"] = digitalRead(pmod_pin10);
-  pmod_data["power"] = digitalRead(zybo_power);
+  pmod_data["zybo_power"] = digitalRead(zybo_power);
 
   serializeJson(doc, Serial);
   Serial.println();
