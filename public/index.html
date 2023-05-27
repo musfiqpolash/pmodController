@@ -2,7 +2,7 @@
 <html>
 <head>
    <link rel="icon" type="image/x-icon" href="public/favicon.ico" />
-   <title>PMOD Control For ZYBO</title>
+   <title>Zybo Controller</title>
    <script src="socket.io/socket.io.js"></script>
    <style>
       .switch {
@@ -181,18 +181,15 @@
          </div>
       </div>
    </div>
-   <h1>PMOD Control For ZYBO</h1>
+   <h1>ZYBO Controller</h1>
    
-   <!-- <button id="lightOn">Turn Light On</button>
-   <button id="lightOff">Turn Light Off</button>
-   <button onclick="console.log('clicked');">Turn Light Off</button>
-   <div>
+   <div class="mb-5">
       <label class="switch">
-         <input id="zybo" type="checkbox" onchange="sendRequest(this);">
+         <input id="zybo_power" type="checkbox" onchange="sendRequest(this);">
          <span class="slider"></span>
       </label>
-      <label for="zybo">power on the zybo board</label>
-   </div> -->
+      <label for="zybo">zybo board</label>
+   </div>
 
    <div class="mb-5">
       <label class="switch">
@@ -271,7 +268,7 @@
             console.log(data);
             for (const key in data.pmod_data){
                //  console.log(`${key} -> ${data.pmod_data[key]}`);
-                if (key=="power") continue;
+               //  if (key=="power") continue;
                 setCheckbox(key, data.pmod_data[key]);
             }
             spinner.style.display="none";
