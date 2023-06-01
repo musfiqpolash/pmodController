@@ -10,6 +10,8 @@ const io = new Server(server);
 
 var device_path='/dev/ttyArduino';
 var opsys = process.platform;
+var serialPortError = false;
+var errorMessage;
 
 if (opsys == "win32" || opsys == "win64") {
     device_path="COM3";
@@ -48,6 +50,10 @@ app.get("/", (req, res)=>{
 
 io.on('connection', (socket) => {
     socket.on('toArduino', function (data) {
+        if (serialPortError){
+            console.log(errorMessage);
+            io.emit('serialporterror',errorMessage);
+        }
         console.log(data);
         port.write( data.command );
     });
@@ -67,3 +73,9 @@ server.listen(3000,()=>{
     console.log("listening on *.3000");
 });
 console.log("Web Server Started go to `http://localhost:3000` in your  Browser.");
+
+port.on('error',(err)=>{
+    console.log(err.message);
+    serialPortError = true;
+    errorMessage = err.message;
+});

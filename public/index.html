@@ -152,8 +152,12 @@
          }
       }
       
-      // playVideoFromCamera();
-      
+      playVideoFromCamera();
+      socket.on('serialporterror', (errorMessage)=>{
+         console.log(errorMessage);
+         alert("PMOD Controller is not connected "+errorMessage);
+         spinner.style.display="none";
+      });
    </script>
    
 </body>
