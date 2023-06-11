@@ -1,4 +1,6 @@
 #include <ArduinoJson.h>
+#include <dht.h>
+#define dht11pin 21
 StaticJsonDocument<128> doc;
 JsonObject pmod_data = doc.createNestedObject("pmod_data");
 String input;
@@ -11,6 +13,8 @@ int pmod_pin7 = 6;
 int pmod_pin8 = 7;
 int pmod_pin9 = 8;
 int pmod_pin10 = 9;
+
+dht DHT;
 
 void setup() {
   Serial.begin(9600);
@@ -26,14 +30,15 @@ void setup() {
   //Serial.println("initialized");
   delay(1000);
 
-  jsonData();
+  // jsonData();
   //Serial.println();
 }
 
 void loop() {
+
   if (Serial.available()) {
     input = Serial.readStringUntil('\n');
-    
+
     if (input == "pmod_pin1") {
       digitalWrite(pmod_pin1, HIGH);
       jsonData();
@@ -98,24 +103,26 @@ void loop() {
       digitalWrite(pmod_pin10, LOW);
       jsonData();
     }
-    if (input == "jsonData"){
+    if (input == "jsonData") {
       jsonData();
     }
-    if (input == "zybo_power"){
+    if (input == "zybo_power") {
       digitalWrite(zybo_power, HIGH);
       jsonData();
     }
-    if (input == "zybo_power_o"){
+    if (input == "zybo_power_o") {
       digitalWrite(zybo_power, LOW);
       jsonData();
     }
+    if (input == "sensor_data") {
+      sensorData();
+    }
   }
-  //delay(5000);
 }
 
 void jsonData() {
-  doc["sensor"] = "gps";
-  doc["time"] = 1351824120;
+  doc["sensor_data"] = false;
+  // doc["time"] = 1351824120;
 
 
   pmod_data["pmod_pin1"] = digitalRead(pmod_pin1);
@@ -131,4 +138,18 @@ void jsonData() {
   serializeJson(doc, Serial);
   Serial.println();
   // serializeJsonPretty(doc, Serial);
+}
+
+void sensorData() {
+  int photoResistor = analogRead(A6);
+  int readDHT = DHT.read11(dht11pin);
+  float t = DHT.temperature;  // Read temperature
+  float h = DHT.humidity;     // Read humidity
+  doc["temperature_c"] = t;
+  doc["temperature_f"] = (t * 9.0) / 5.0 + 32.0;
+  doc["humidity"] = h;
+  doc["photo_resistor"] = photoResistor;
+  doc["sensor_data"] = true;
+  serializeJson(doc, Serial);
+  Serial.println();
 }
