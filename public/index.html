@@ -26,78 +26,93 @@
       </div>
    </div>
    <h1>ZYBO Controller</h1>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="zybo_power" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="zybo">zybo board</label>
+   <div class="flex">
+      <div class="w-50">
+         <div class="mb-5">
+            <label class="switch">
+               <input id="zybo_power" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="zybo">zybo board</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin1" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin1">control pmod1 : V12</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin2" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin2">control pmod2 : W16</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin3" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin3">control pmod3 : J15</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin4" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin4">control pmod4 : H15</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin7" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin7">control pmod7 : V13</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin8" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin8">control pmod8 : U17</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin9" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin9">control pmod9 : T17</label>
+         </div>
+         
+         <div class="mb-5">
+            <label class="switch">
+               <input id="pmod_pin10" type="checkbox" onchange="sendRequest(this);">
+               <span class="slider"></span>
+            </label>
+            <label for="pmod_pin10">control pmod10 : Y17</label>
+         </div>
+      </div>
+
+      <div class="w-50 flex-center bg-black color-greenyellow">
+         <div class="sensor_value">
+            <h3>Sensor Value</h3>
+            <!-- <button onclick="fetchSensorValue()">Refresh</button> <br> -->
+            <span>Temperature: </span><span id="temp_c"></span> | <span id="temp_f"></span> <br>
+            <span>Humidity: </span><span id="humid"></span> <br>
+            <span>Light Condition </span><span id="light_cnd"></span>
+         </div>
+      </div>
    </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin1" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin1">control pmod1 : V12</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin2" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin2">control pmod2 : W16</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin3" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin3">control pmod3 : J15</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin4" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin4">control pmod4 : H15</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin7" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin7">control pmod7 : V13</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin8" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin8">control pmod8 : U17</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin9" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin9">control pmod9 : T17</label>
-   </div>
-   
-   <div class="mb-5">
-      <label class="switch">
-         <input id="pmod_pin10" type="checkbox" onchange="sendRequest(this);">
-         <span class="slider"></span>
-      </label>
-      <label for="pmod_pin10">control pmod10 : Y17</label>
-   </div>
+
+
    <div class="video">
       <video id="localVideo" autoplay playsinline controls="false"/>
    </div>
@@ -107,7 +122,15 @@
       // timeout(1000);
       var socket = io();
       socket.emit('toArduino', { "command":"jsonData"});
+
+      setTimeout(()=>{
+         fetchSensorValue();
+      }, 3000);
       
+      setInterval(()=>{
+         fetchSensorValue();
+      },60000);
+
       socket.on('data',function(data){
          if (data) {
             // var rcv = JSON.parse(data);
@@ -121,6 +144,18 @@
          }
       });
       
+      socket.on('sensor_data',function(data){
+         if (data) {
+            console.log(data);
+            document.getElementById("temp_c").innerHTML=data.temperature_c + "C";
+            document.getElementById("temp_f").innerHTML=data.temperature_f + "F";
+            document.getElementById("humid").innerHTML=data.humidity + "%";
+            document.getElementById("light_cnd").innerHTML=data.photo_resistor;
+         }
+      });
+      function fetchSensorValue() {
+         socket.emit('toArduino', { "command":"sensor_data"});
+      }
       function setCheckbox(id, value) {
          var ckbox=document.getElementById(id);
          ckbox.checked=value;
@@ -152,7 +187,7 @@
          }
       }
       
-      playVideoFromCamera();
+      // playVideoFromCamera();
       socket.on('serialporterror', (errorMessage)=>{
          console.log(errorMessage);
          alert("PMOD Controller is not connected "+errorMessage);

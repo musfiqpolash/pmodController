@@ -4,15 +4,17 @@
 StaticJsonDocument<128> doc;
 JsonObject pmod_data = doc.createNestedObject("pmod_data");
 String input;
-int zybo_power = 10;
-int pmod_pin1 = 2;
-int pmod_pin2 = 3;
-int pmod_pin3 = 4;
-int pmod_pin4 = 5;
-int pmod_pin7 = 6;
-int pmod_pin8 = 7;
-int pmod_pin9 = 8;
-int pmod_pin10 = 9;
+const int zybo_power = 2;
+const int pmod_pin1 = 3;
+const int pmod_pin2 = 4;
+const int pmod_pin3 = 5;
+const int pmod_pin4 = 6;
+const int pmod_pin7 = 7;
+const int pmod_pin8 = 8;
+const int pmod_pin9 = 9;
+const int pmod_pin10 = 10;
+const int led = 13;
+int light_sensor_value;
 
 dht DHT;
 
@@ -27,6 +29,7 @@ void setup() {
   pinMode(pmod_pin9, OUTPUT);
   pinMode(pmod_pin10, OUTPUT);
   pinMode(zybo_power, OUTPUT);
+  pinMode(led, OUTPUT);
   //Serial.println("initialized");
   delay(1000);
 
@@ -35,6 +38,13 @@ void setup() {
 }
 
 void loop() {
+  light_sensor_value = analogRead(A6);
+  if(light_sensor_value < 350){
+    digitalWrite(led, HIGH);
+  }
+  else{
+    digitalWrite(led, LOW);
+  }
 
   if (Serial.available()) {
     input = Serial.readStringUntil('\n');
